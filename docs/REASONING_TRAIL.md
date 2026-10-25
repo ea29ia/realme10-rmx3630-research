@@ -44,9 +44,10 @@ Find a public, reproducible path to unlock the bootloader on a Realme 10 4G
   byte-level difference from the generic upstream DA (which has the old unclamped
   loop) and from the 420EX01 build (which we range-downloaded from the official
   OTA server and disassembled).
-- **Older DAs are refused at the DAA gate** (`0x7024`). This is anti-downgrade
-  via certificate rotation in the December OTA. Verified with 420EX01 DA (Realme-signed,
-  genuine signature) — still rejected.
+- **Older DAs are refused at the DAA gate** (`0x7024`). Verified with 420EX01 DA
+  (Realme-signed, genuine signature) — still rejected. **[Corrected later: the
+  mechanism is the preloader's own RSA-PSS verifier rejecting the unsigned
+  AllInOne container, not cert rotation — see `PRELOADER_AUDIT.md` §3]**
 - **The entire DA2 XML command surface was audited** (14 functions, assembly-level
   evidence for every size check and memory lifecycle). Result: 0 candidates ≥3/5.
 - **The preloader descriptor issue** (wMaxPacketSize=0) from earlier reports was
@@ -258,13 +259,24 @@ What we found:
   dpc_addr=0x40069df0, etc.).
 
 Why it doesn't help: On 2710EX01, uploading the 420EX01 DA fails at
-DAA_SIG_VERIFY_FAILED (0x7024) — the device refuses older DA signatures at
-the authentication gate. This is anti-downgrade via certificate rotation in the
-December OTA.
+DAA_SIG_VERIFY_FAILED (0x7024) — the device refuses the DA at the
+authentication gate.
 
-Lesson: Even a vulnerable DA is useless if the device refuses to load it.
+**Correction (added later, after the preloader audit):** the original
+"anti-downgrade via certificate rotation" explanation was WRONG. The 0x7024
+comes from the **preloader's own signature verifier** (FUN_00237938, see
+`PRELOADER_AUDIT.md`): the AllInOne container ships DA1/DA2 with an all-zero
+256-byte signature trailer, and DA_BR's copies are signed — same code bytes.
+So "load an older DA" fails because it is **unsigned in its container**, not
+because certs rotated. The verifier is a genuine RSA-2048/e=65537/PSS-SHA256
+check (sig_len hard-gated at 0x100, digest over da_len−sig_len, modulus in
+boot-populated SRAM) — unforgeable without the MTK/OPLUS private key.
 
-Status: CLOSED. Older DA path is blocked at DAA.
+Lesson: Even a vulnerable DA is useless if the device refuses to load it —
+and the refusal here is cryptographic, not a cert-rotation policy.
+
+Status: CLOSED. Older DA path is blocked at DAA (mechanism now fully
+understood — see PRELOADER_AUDIT.md §3).
 
 ---
 

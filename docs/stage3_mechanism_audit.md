@@ -94,6 +94,13 @@ Verdict: the fallback is moot while the only overflow primitive is closed.
 
 ## 6) Where this leaves the campaign (honest)
 
+**[UPDATE 2026-10-25, late — the "OPEN" row below was resolved the same night:
+the mxml parse path was audited clean (`mxml_parser_audit.md`), and the whole
+DA2 XML surface was closed in `TRIPLE_FINAL_SUMMARY.md` (14 functions, 0
+candidates). The 200EX01 over-delivery question was also answered by ea29ia
+(#409): his build loads the packet length unclamped — the GENERIC loop shape
+(`readcb_build_diff_audit.md`).]**
+
 | Mechanism | Status on 2710EX01 |
 |---|---|
 | XML-escape 0xBFA cap blocks payload | **FALSE** — input truncated at 512 first |
@@ -101,14 +108,7 @@ Verdict: the fallback is moot while the only overflow primitive is closed.
 | stage-3 fails via buffer-too-small (real meaning) | **TRUE** — request < packet length |
 | 60KB trigger shapes the heap | **FALSE** — 512-char truncation upstream |
 | fp_read_host_file overflow (heapbait core) | **CLOSED** — watertight on this build |
-| mxml/parse-side overflow (NOT yet audited) | **OPEN** — only remaining candidate class |
-
-The only un-audited allocation surface left is the mxml parse path itself (the
-140→…→5132 realloc chain) and FUN_400020ac's attribute handling. heapbait-as-published
-cannot work here; a different vector (or a build-specific bug in the parser) would be
-required. That reframes the #409 question for ea29ia: on 200EX01, does his read
-callback really over-deliver (returns packet_length > request without error)? His
-build must differ at FUN_4002aa28's `if (requested < hdr.word3)` check.
+| mxml/parse-side overflow (NOT yet audited) | **OPEN** — only remaining candidate class *(→ since audited clean, see mxml_parser_audit.md)* |
 
 ## 7) Verifiable artifacts
 

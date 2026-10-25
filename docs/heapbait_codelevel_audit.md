@@ -93,6 +93,17 @@ does a plain `in` substring check — presence alone blocks the exploit, regardl
 
 ## Verdict
 
+**[UPDATE 2026-10-25, late — the W1 framing below was written before the
+read-callback audit completed. The final picture (see `TRIPLE_FINAL_SUMMARY.md`
+and the #409 thread): the copy loop's per-chunk clamp (`min(remaining,
+packet_max)`) AND the read callback's refusal to deliver more than requested
+(`0xc0010006`) together close the over-delivery primitive at the transport
+layer. The "callback honors packet_length over requested length" note below
+was ea29ia's 200EX01-runtime description; our 2710EX01 callback was later
+proven to refuse (0xc0010006). The "NOT fixed at code level" verdict applies
+to the allocation-size clamp only, and is superseded by the transport-layer
+closure — keep this document as the audit trail, not as the current verdict.]**
+
 **W1 — the vulnerability is NOT fixed at code level; the marker string is cosmetic.**
 
 | Check | Result | Evidence |

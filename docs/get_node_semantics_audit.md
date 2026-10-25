@@ -85,6 +85,12 @@ our identical logs across runs.
 
 ## Recommended change (for the next deployment round)
 
+**[UPDATE 2026-10-25, late — moot on 2710EX01: the transport layer was
+subsequently proven to refuse the over-delivery bytes entirely (see
+`stage3_mechanism_audit.md` §3 and `readcb_build_diff_audit.md`), so no
+get_node fix can resurrect heapbait on this build. Kept for the audit trail
+and for anyone working on a build that still has the generic loop shape.]**
+
 In `find_get_node`'s fallback: replace `get_node := malloc core` with
 `get_node := malloc-wrapper (caller of the core with signature (size, 0))` —
 derive dynamically via `BL <core>` scan; keep `OPLUS_GET_NODE_ADDR` override.

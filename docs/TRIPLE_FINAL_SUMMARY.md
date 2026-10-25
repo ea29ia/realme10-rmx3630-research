@@ -122,22 +122,20 @@ by closed callees. The DA2 command surface on 2710EX01 is, by this audit, watert
 
 ### Honest probability the vector is elsewhere
 
+**[Update 2026-10-25, late — the list below was written before the DA1 and
+preloader audits. Both are now DONE and CLOSED: see `DA1_AUDIT.md` and
+`PRELOADER_AUDIT.md`. DA1: 11/11 commands, 0 candidates ≥2/5. Preloader:
+usbdl map + whitelist + genuine RSA-PSS verify. The remaining surface is
+TEE/tbase only.]**
+
 **HIGH (~85-90%).** This audit covered the XML-command surface of DA2 exhaustively.
 Remaining untested surfaces, in order of promise:
 
 1. **DA1 (the stage-1 loader)** — 0x69424 bytes, NEVER audited in this project. It parses
    its own host commands before DA2 runs (COM ports, boot params). If a vector exists
    below the DA2 XML layer, it is here. NOTE: DAA gates loading DA1 itself — the attack
-   would be IN DA1's protocol handling after boot, reachable once DA1 runs.
-2. **Preloader (boot ROM stage)** — entirely outside this project's binaries.
-3. **EFUSE command handlers** (0x4003184a..0x40032dc4 + 0x40007ea8/07f58) — reachable
-   via CMD:WRITE-EFUSE/READ-EFUSE, audited only structurally (Phase 1 listing), not
-   deep-dived. Blow-verify logic with index math worth one pass IF ever unlocked.
-4. **RPMB suite** (0x40025d4c..0x40026eb0) — HMAC frame handling; low priority (needs
-   RPMB key session).
-5. **oplus_security_verify_sec_policy state machine** (0x4001033c) — mapped by ea29ia,
-   patched-at-runtime in our plan, but its internal transitions (status 1/2/3/4) were
-   never byte-audited for a logic bypass. Medium value, needs the policy XML format.
+   would be IN DA1's protocol handling after boot, reachable once DA1 runs. **[DONE — closed]**
+2. **Preloader (boot ROM stage)** — entirely outside this project's binaries. **[DONE — closed]**
 
 ### Bottom line for the record
 

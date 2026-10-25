@@ -3,35 +3,47 @@
 Static analysis and exploitation research for MT6789 (Helio G99) on Realme 10
 4G, build 2710EX01 (Dec-2025 security patch).
 
-## Status (2026-10-25)
+## Status (2026-10-25, final)
 
-**DA2 XML attack surface: fully audited. No viable vector found.**
+**Every audited surface is closed. No viable vector found anywhere.**
 
-- heapbait is patched at the transport layer (clamp + callback refusal)
-- 14 DA2 functions audited (assembly-level evidence)
-- 3-way diff against 420EX01 and generic MTK → 20 OPLUS-added candidates
-- 0 candidates ≥ 3/5
+- DA2 XML attack surface: fully audited (14 functions, 0 candidates ≥ 3/5)
+- heapbait: patched at the transport layer (clamp + callback refusal)
+- **DA1: fully audited (11 commands, 0 candidates ≥ 2/5) — hardened like DA2**
+- **Preloader: fully mapped (usbdl state machine + whitelist) and the DAA
+  gate is a genuine RSA-2048/PSS-SHA256 verify — 0x7024 unforgeable**
+- **RAM-TEST: real write primitive (device-verified) but data-only — two
+  parity-selected constants, no read oracle, no reachable consumer**
+- **ram_size cross-check: structural no-op (all readers share one runtime
+  DRAM-probe global)**
 
 ## What's in this repo
 
 - `docs/` — full audit reports, log, and handoff docs
+  - `TRIPLE_FINAL_SUMMARY.md` — DA2 XML audit (14 functions)
+  - `DA1_AUDIT.md` — full DA1 command-surface closure + the RAM-TEST
+    correction trail
+  - `PRELOADER_AUDIT.md` — usbdl map, whitelist, RSA-PSS verifier, ram_size
+  - `REASONING_TRAIL.md` — the complete investigation story
 - `scripts/` — trace decoder and deploy tooling
 - `analysis/` — raw JSON data (reachability, 3-way diff)
 
-## Untested surfaces (for future work)
+## What remains (for anyone continuing)
 
-1. **DA1** (0x69424 bytes) — never audited. Strongest candidate (~30-40% est.)
-2. Preloader — outside this project's binaries
-3. EFUSE handlers (0x4003184a..0x40032dc4)
-4. Cert chain verification (FUN_40037fc8, 0x4003ce28, 0x4003e110)
-5. RPMB suite (0x40025d4c..0x40026eb0)
-6. oplus_security_verify_sec_policy state machine (0x4001033c)
+- **TEE/tbase** — a different order of project; the only theoretical layer
+  above everything audited here.
+- The RPMB mirror map (LK blocks 0x1DC–0x1DF, `+0xC` lock field, `+0x20`
+  "RMX3630RU", `+0x3E0` SHA-256) is the reusable result: the unlock recipe
+  is model-wide (byte-identical LK path across builds) and waits only on any
+  authenticated RPMB write primitive — which is exactly what this firmware
+  generation does not offer.
 
 ## Related links
 
 - mtkclient issue #409: https://github.com/bkerler/mtkclient/issues/409
 - Penumbra issue #134 (same device, different user)
 - ea29ia's PR #410 (DA2 pre-patching research)
+- ea29ia's notes (cross-linked): `ea29ia/mtkclient` — `docs/notes/da2_static_audit.py`, `docs/notes/reverse/re-da2-2710-audit-2026-10-25.md`, branch `oplus-mt6789-unlock` (the 200EX01 unlock + root write-up)
 
 ## Methodology notes
 

@@ -13,15 +13,39 @@
 - scatter parser — safe (count guard 0xbf, bounded copies)
 - 11 more DA2 XML functions — see `TRIPLE_FINAL_SUMMARY.md`
 
-## Untested surfaces (for whoever picks this up)
+## UPDATE (2026-10-25, late) — DA1 + Preloader now audited; this list is historical
 
-### Priority 1 — DA1 (strongest candidate, ~30-40% est.)
+The original priority list below was written when only DA2 was audited.
+Since then (see `DA1_AUDIT.md` and `PRELOADER_AUDIT.md`):
+
+- **Priority 1 (DA1): DONE — closed.** All 11 commands audited, 0 candidates
+  ≥ 2/5. Includes the full RAM-TEST correction trail (write primitive real
+  but data-only, no oracle, no consumer).
+- **Priority 2 (Preloader): DONE — closed.** usbdl state machine mapped,
+  whitelist = WDT + 1 reg + 1 MMIO page only, and the DAA gate is a genuine
+  RSA-2048/e=65537/PSS-SHA256 verify with a boot-populated SRAM modulus.
+  0x7024 unforgeable. The ram_size cross-check resolved offline as a
+  structural no-op.
+- **Priority 3-6 (EFUSE/cert-chain/RPMB/oplus_security): unchanged** — all
+  assessed low-probability; RPMB primitives exist but are XML-unreachable
+  on stock 2710EX01 (session 7-9 work).
+
+**The only remaining theoretical layer is TEE/tbase — a different order of
+project.** The reusable positive result is the RPMB mirror map (LK blocks
+0x1DC–0x1DF): the unlock recipe is model-wide and waits on any authenticated
+RPMB write primitive.
+
+---
+
+## Untested surfaces (original list, kept for context)
+
+### Priority 1 — DA1 (strongest candidate, ~30-40% est.) [DONE — closed]
 - Size: 0x69424 bytes (428 KB)
 - Location: extracted at `research/da_offline_analysis/DA1_extracted.bin` (not in this repo — proprietary)
 - Why: parses its own host commands before DA2 runs. Never audited in this project.
 - Approach: same methodology as DA2 (3-way diff vs 420EX01/generic, reachability, gate/assembly)
 
-### Priority 2 — Preloader (~15-20%)
+### Priority 2 — Preloader (~15-20%) [DONE — closed]
 - Outside this project's binaries
 - Handshake protocol audited (descriptor bug was tooling-side, not firmware)
 - Suggests looking at preloader command handling in the generic MTK preloader if available
