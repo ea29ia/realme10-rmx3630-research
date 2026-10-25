@@ -26,6 +26,12 @@ Static analysis and exploitation research for MT6789 (Helio G99) on Realme 10
   - `PRELOADER_AUDIT.md` — usbdl map, whitelist, RSA-PSS verifier, ram_size
   - `REASONING_TRAIL.md` — the complete investigation story
 - `scripts/` — trace decoder and deploy tooling
+  - **Note:** the two heapbait `_vm_deploy_block_{trigger,sweep4200}.sh` patches
+    are **historical** — the transport-layer closure (see `docs/TRIPLE_FINAL_SUMMARY.md`)
+    supersedes them on 2710EX01, and running them yields the stock NAK envelope.
+    `trace_decode_logprobe.py` (allocator free-list decoder) and the logprobe config
+    (`_vm_deploy_block_logprobe.sh` — in-band USB logging) remain genuinely useful
+    on any build where the log channel is reachable.
 - `analysis/` — raw JSON data (reachability, 3-way diff)
 
 ## What remains (for anyone continuing)
