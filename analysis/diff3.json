@@ -1,0 +1,137 @@
+{
+ "counts": {
+  "ours": 951,
+  "old420": 979,
+  "generic": 900
+ },
+ "only2710_vs_both": [
+  {
+   "ep": "0x40001504",
+   "name": "FUN_40001504",
+   "size": 736,
+   "ninstr": 184
+  },
+  {
+   "ep": "0x40001a78",
+   "name": "FUN_40001a78",
+   "size": 684,
+   "ninstr": 171
+  },
+  {
+   "ep": "0x40001e0c",
+   "name": "FUN_40001e0c",
+   "size": 540,
+   "ninstr": 135
+  },
+  {
+   "ep": "0x40002818",
+   "name": "FUN_40002818",
+   "size": 2260,
+   "ninstr": 565
+  },
+  {
+   "ep": "0x400030ec",
+   "name": "FUN_400030ec",
+   "size": 1128,
+   "ninstr": 282
+  },
+  {
+   "ep": "0x40003c38",
+   "name": "FUN_40003c38",
+   "size": 1320,
+   "ninstr": 330
+  },
+  {
+   "ep": "0x40006200",
+   "name": "FUN_40006200",
+   "size": 1128,
+   "ninstr": 282
+  },
+  {
+   "ep": "0x400084cc",
+   "name": "FUN_400084cc",
+   "size": 1604,
+   "ninstr": 401
+  },
+  {
+   "ep": "0x4000b858",
+   "name": "FUN_4000b858",
+   "size": 636,
+   "ninstr": 159
+  },
+  {
+   "ep": "0x4000bad4",
+   "name": "FUN_4000bad4",
+   "size": 2092,
+   "ninstr": 523
+  },
+  {
+   "ep": "0x4000c470",
+   "name": "FUN_4000c470",
+   "size": 680,
+   "ninstr": 170
+  },
+  {
+   "ep": "0x4000c764",
+   "name": "FUN_4000c764",
+   "size": 780,
+   "ninstr": 195
+  },
+  {
+   "ep": "0x4000fb54",
+   "name": "FUN_4000fb54",
+   "size": 2024,
+   "ninstr": 506
+  },
+  {
+   "ep": "0x4001033c",
+   "name": "oplus_security_verify_sec_policy",
+   "size": 892,
+   "ninstr": 223
+  },
+  {
+   "ep": "0x40013020",
+   "name": "FUN_40013020",
+   "size": 848,
+   "ninstr": 212
+  },
+  {
+   "ep": "0x4002afd8",
+   "name": "FUN_4002afd8",
+   "size": 916,
+   "ninstr": 229
+  },
+  {
+   "ep": "0x4002bff4",
+   "name": "FUN_4002bff4",
+   "size": 1524,
+   "ninstr": 381
+  },
+  {
+   "ep": "0x4002db64",
+   "name": "FUN_4002db64",
+   "size": 668,
+   "ninstr": 167
+  },
+  {
+   "ep": "0x4002f82c",
+   "name": "FUN_4002f82c",
+   "size": 388,
+   "ninstr": 97
+  },
+  {
+   "ep": "0x40032f9c",
+   "name": "FUN_40032f9c",
+   "size": 916,
+   "ninstr": 229
+  }
+ ],
+ "only2710_vs_420_but_in_generic": [
+  {
+   "ep": "0x4001337c",
+   "name": "FUN_4001337c",
+   "size": 880,
+   "ninstr": 220
+  }
+ ]
+}
