@@ -17,12 +17,16 @@ H' = SHA256(0^8 || SHA256(msg) || salt) == EM[223:255]):
   crosses (200 x K27, 2710 x S, C.25 x K27, doogee/oukitel/infinix3 x S/K27):
   no-BC / struct-fail  (different per-build keys; their preloaders not in corpus)
 
-Deviation from strict RSASSA-PSS: DB[0] = 0x80 (top bit NOT cleared, i.e. the
-emBits=2048 variant); everything else matches. Alexander's verifier spec
-(docs/DA_TIMELINE.md in alexander-dev2313123/realme10-rmx3630-research):
-"EM[0xFF]==0xBC, MGF1-SHA256 unmask, DB[0xBE]==0x01, full 32-byte compare" --
-reproduced exactly. His runtime-SRAM model (modulus staged at 0x2F9F38) is
-therefore confirmed with the in-file block as the staged source.
+Layout note (mixed emBits): 200-DA1 / 2710-DA1 / 2710-DA2 use the emBits=2048
+variant (DB[0]==0x80, top bit not cleared); 200-DA2 and both C.25 signatures
+use the standard top-bit-cleared layout (emBits=2047). All six verify either
+way. Verifier spec from docs/DA_TIMELINE.md in
+alexander-dev2313123/realme10-rmx3630-research ("EM[0xFF]==0xBC, MGF1-SHA256
+unmask, DB[0xBE]==0x01, full 32-byte compare") reproduced exactly; the
+runtime-SRAM model (modulus staged at 0x2F9F38) is confirmed with the in-file
+block as the staged source. Per-era model: S era = Mar-2023..May-2025 (C.25,
+200, 420, 1900, 400), K27 era = Oct-2025.. (2302, 2710); the S block persists
+in K27-era preloaders but is no longer wired to the DA1 verify.
 """
 import hashlib, struct, sys
 
