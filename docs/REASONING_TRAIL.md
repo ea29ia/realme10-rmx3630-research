@@ -536,7 +536,7 @@ Key addresses (2710EX01 DA2)
 · heap_init: FUN_40008e64
 · DPC called-fn field: 0x4006a570
 · DAL/DI: 0x4001033c (oplus_security_verify_sec_policy)
-· g_oplus_auth_status: 0x40054C88
+· g_oplus_auth_status: 0x40054C88 (2710EX01; 200EX01 equivalent 0x4005455C)
 · g_dual_cache_base: 0x40069da8
 
 Key addresses (420EX01 DA2, for reference)

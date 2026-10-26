@@ -26,9 +26,17 @@ Since then (see `DA1_AUDIT.md` and `PRELOADER_AUDIT.md`):
   RSA-2048/e=65537/PSS-SHA256 verify with a boot-populated SRAM modulus.
   0x7024 unforgeable. The ram_size cross-check resolved offline as a
   structural no-op.
-- **Priority 3-6 (EFUSE/cert-chain/RPMB/oplus_security): unchanged** — all
-  assessed low-probability; RPMB primitives exist but are XML-unreachable
-  on stock 2710EX01 (session 7-9 work).
+- **Priority 6 (oplus_security state machine): DONE — closed.** Byte-audited on both
+  builds: the accept requires a genuine RSA-2048 PKCS#1 v1.5 verify (e=0x10001) whose
+  256-byte modulus is byte-identical in 200EX01 and 2710EX01 (`sha256 c58002ae…`); no
+  unsigned/fallback/efuse path. One captured vendor blob is replayable with an arbitrary
+  policy body (device-level authorization), but grants flash-write registration only —
+  it does not touch AVB/LK/RPMB. See `DA2_POLICY_SIGNATURE.md`.
+- **Intermediate-DA idea: RESOLVED by device experiment.** 400EX01 and 1900EX01 DA_BR
+  containers (properly signed) are both refused with 0x7024 — together with the 420EX01
+  and 200EX01 data points, the DAA key material was rolled once, before 2025-01.
+- **Priority 3-5 (EFUSE/cert-chain/RPMB): unchanged** — all assessed low-probability;
+  RPMB primitives exist but are XML-unreachable on stock 2710EX01 (session 7-9 work).
 
 **The only remaining theoretical layer is TEE/tbase — a different order of
 project.** The reusable positive result is the RPMB mirror map (LK blocks
@@ -40,7 +48,7 @@ RPMB write primitive.
 ## Untested surfaces (original list, kept for context)
 
 ### Priority 1 — DA1 (strongest candidate, ~30-40% est.) [DONE — closed]
-- Size: 0x69424 bytes (428 KB)
+- Size: 0x69424 bytes (431,140 B = 421 KiB)
 - Location: extracted at `research/da_offline_analysis/DA1_extracted.bin` (not in this repo — proprietary)
 - Why: parses its own host commands before DA2 runs. Never audited in this project.
 - Approach: same methodology as DA2 (3-way diff vs 420EX01/generic, reachability, gate/assembly)

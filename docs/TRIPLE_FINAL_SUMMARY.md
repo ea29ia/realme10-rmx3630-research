@@ -145,4 +145,10 @@ old-DA route. Within the audited surface, the only real defects found (bad4 fall
 07fb0 no-NUL walk) are neutralized by callers/init state and shared with all builds —
 neither is a 2710EX01-specific exploitable path.
 
-**Queue exhausted. Recommended next target if the campaign ever reopens: DA1.**
+**[Update 2026-10-26] Queue exhausted — and the two recommendations below it are both
+closed: DA1 was audited the same day (see DA1_AUDIT.md), and the intermediate-DA idea was
+settled by device experiment (400EX01/1900EX01 → 0x7024; key material rolled once before
+2025-01, see PROVENANCE.md). The oplus_security state machine (old Priority 6) is now also
+byte-audited on both builds (see DA2_POLICY_SIGNATURE.md). Remaining open surfaces: cert-chain
+verification inside DA2 (FUN_40037fc8 cluster) and EFUSE handler internals — both assessed
+low-probability — and TEE/tbase, which is a different order of project.**

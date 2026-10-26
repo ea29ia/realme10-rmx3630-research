@@ -72,11 +72,14 @@ termination). OPLUS's 2710EX01 fork replaced both:
 | Escape buffer | 0x200, cached | 0xC00, cached (bigger but irrelevant — input still ≤512) |
 | strnlen filename cap | 0x200 | 0x200 (same) |
 
-Caveat (honest): this proves the DIFFERENCE EXISTS between the generic baseline and
-our unit's DA. It does not yet prove ea29ia's own 200EX01 DA has the generic shape —
-his device DA is a different file we still haven't seen. But since heapbait works on
-his unit, his DA must preserve the generic loop shape (or an equivalent primitive);
-the OPLUS fork is the variant that broke it.
+**[RESOLVED 2026-10-26 — ea29ia's device DA is now available and confirms the generic
+shape.]** His 200EX01 DA2 (356,296 B, sha256 `8f99fb3e…`, `fp_read_host_file` at 0x4002AE8C)
+has: unclamped request (`ldr r0,[sp,#0x24]` straight to the request slot), exact-equality
+termination (`cmp r7,r9 / bne`), escape helper `malloc(0x200)` with no output bound and no
+tripwire string. That is the generic loop shape verbatim. So the fork happened **inside
+OPLUS** between the 200EX01 (2024-09) and 2710EX01 (2025-12) exports — not "generic MTK vs
+OPLUS": MTK's own newer DA generations (2025-01 onward, see DA_HARDENING_TIMELINE.md) carry
+the same clamp independently.
 
 ## 5) Implications for the campaign
 
